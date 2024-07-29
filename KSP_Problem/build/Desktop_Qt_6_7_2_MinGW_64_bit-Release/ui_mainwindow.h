@@ -34,7 +34,7 @@ public:
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout_5;
     QGroupBox *groupBox_2;
-    QVBoxLayout *verticalLayout_3;
+    QVBoxLayout *verticalLayout_2;
     QHBoxLayout *horizontalLayout;
     QLabel *label_5;
     QLineEdit *le_nomeArquivo;
@@ -42,6 +42,7 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QLabel *label;
     QSpinBox *sb_capMochila;
+    QHBoxLayout *horizontalLayout_6;
     QLabel *label_2;
     QSpinBox *sb_numItens;
     QHBoxLayout *horizontalLayout_3;
@@ -54,7 +55,6 @@ public:
     QComboBox *cb_peso;
     QPushButton *btn_exec;
     QPushButton *btn_parar;
-    QPushButton *btn_exec_2;
     QGroupBox *groupBox;
     QVBoxLayout *verticalLayout;
     QTextEdit *te_outDisplay;
@@ -77,8 +77,8 @@ public:
         groupBox_2->setMaximumSize(QSize(320, 16777215));
         groupBox_2->setStyleSheet(QString::fromUtf8("background-color: rgb(179, 179, 179);\n"
 "color: rgb(0, 0, 0);"));
-        verticalLayout_3 = new QVBoxLayout(groupBox_2);
-        verticalLayout_3->setObjectName("verticalLayout_3");
+        verticalLayout_2 = new QVBoxLayout(groupBox_2);
+        verticalLayout_2->setObjectName("verticalLayout_2");
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName("horizontalLayout");
         label_5 = new QLabel(groupBox_2);
@@ -102,12 +102,13 @@ public:
         horizontalLayout->addWidget(btn_loadFile);
 
 
-        verticalLayout_3->addLayout(horizontalLayout);
+        verticalLayout_2->addLayout(horizontalLayout);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName("horizontalLayout_2");
         label = new QLabel(groupBox_2);
         label->setObjectName("label");
+        label->setMinimumSize(QSize(20, 20));
         label->setFont(font);
 
         horizontalLayout_2->addWidget(label);
@@ -117,26 +118,33 @@ public:
         QFont font1;
         font1.setPointSize(10);
         sb_capMochila->setFont(font1);
-        sb_capMochila->setMaximum(1000000);
+        sb_capMochila->setMaximum(100000000);
 
         horizontalLayout_2->addWidget(sb_capMochila);
 
+
+        verticalLayout_2->addLayout(horizontalLayout_2);
+
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setSpacing(0);
+        horizontalLayout_6->setObjectName("horizontalLayout_6");
         label_2 = new QLabel(groupBox_2);
         label_2->setObjectName("label_2");
-        label_2->setMinimumSize(QSize(20, 0));
+        label_2->setMinimumSize(QSize(20, 10));
+        label_2->setMaximumSize(QSize(16777215, 20));
         label_2->setFont(font);
-        label_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        label_2->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
 
-        horizontalLayout_2->addWidget(label_2);
+        horizontalLayout_6->addWidget(label_2);
 
         sb_numItens = new QSpinBox(groupBox_2);
         sb_numItens->setObjectName("sb_numItens");
-        sb_numItens->setMaximum(1000000);
+        sb_numItens->setMaximum(10000000);
 
-        horizontalLayout_2->addWidget(sb_numItens);
+        horizontalLayout_6->addWidget(sb_numItens);
 
 
-        verticalLayout_3->addLayout(horizontalLayout_2);
+        verticalLayout_2->addLayout(horizontalLayout_6);
 
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName("horizontalLayout_3");
@@ -160,9 +168,10 @@ public:
         horizontalLayout_3->addWidget(cb_util);
 
 
-        verticalLayout_3->addLayout(horizontalLayout_3);
+        verticalLayout_2->addLayout(horizontalLayout_3);
 
         horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(3);
         horizontalLayout_4->setObjectName("horizontalLayout_4");
         label_4 = new QLabel(groupBox_2);
         label_4->setObjectName("label_4");
@@ -184,25 +193,20 @@ public:
         horizontalLayout_4->addWidget(cb_peso);
 
 
-        verticalLayout_3->addLayout(horizontalLayout_4);
+        verticalLayout_2->addLayout(horizontalLayout_4);
 
         btn_exec = new QPushButton(groupBox_2);
         btn_exec->setObjectName("btn_exec");
         btn_exec->setFont(font);
         btn_exec->setStyleSheet(QString::fromUtf8("background-color: rgb(122, 122, 122);"));
 
-        verticalLayout_3->addWidget(btn_exec);
+        verticalLayout_2->addWidget(btn_exec);
 
         btn_parar = new QPushButton(groupBox_2);
         btn_parar->setObjectName("btn_parar");
         btn_parar->setFont(font);
 
-        verticalLayout_3->addWidget(btn_parar);
-
-        btn_exec_2 = new QPushButton(groupBox_2);
-        btn_exec_2->setObjectName("btn_exec_2");
-
-        verticalLayout_3->addWidget(btn_exec_2);
+        verticalLayout_2->addWidget(btn_parar);
 
 
         horizontalLayout_5->addWidget(groupBox_2);
@@ -271,8 +275,7 @@ public:
         cb_peso->setWhatsThis(QCoreApplication::translate("MainWindow", "Defined by user or Randonly defined.", nullptr));
 #endif // QT_CONFIG(whatsthis)
         btn_exec->setText(QCoreApplication::translate("MainWindow", "Executar", nullptr));
-        btn_parar->setText(QCoreApplication::translate("MainWindow", "Parar", nullptr));
-        btn_exec_2->setText(QCoreApplication::translate("MainWindow", "Exec_", nullptr));
+        btn_parar->setText(QCoreApplication::translate("MainWindow", "Parar/Clear", nullptr));
         groupBox->setTitle(QCoreApplication::translate("MainWindow", "Sa\303\255da", nullptr));
     } // retranslateUi
 

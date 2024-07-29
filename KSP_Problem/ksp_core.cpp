@@ -4,7 +4,9 @@
 #include <random>
 #include <iostream>
 #include <chrono>
+#include <nlohmann/json.hpp>
 
+using json = nlohmann::json;
 /**
    *  @brief Esta função converte uma stringd e numeros
    *  @ingroup sorting_algorithms
@@ -35,16 +37,30 @@ string Mochila::arrToString(const vector<int>& v) {
 void Mochila::lerArquivo(const string& nomeArquivo) {
     ifstream file(nomeArquivo);
     if (!file.is_open()) {
-        cerr << "Erro ao abrir o arquivo!" << endl;
+        cerr << "Erro ao abrir o arquivo: " << nomeArquivo << endl;
         return;
     }
-    file >> capacidade >> n_itens;
-    pesos.resize(n_itens);
-    utilidades.resize(n_itens);
-    for (int i = 0; i < n_itens; ++i) {
-        file >> pesos[i] >> utilidades[i];
+
+    json j;
+    file >> j;
+
+    try {
+        capacidade = j.at("capacidade").get<int>();
+        n_itens = j.at("n_itens").get<int>();
+        pesos = j.at("pesos").get<vector<int>>();
+        utilidades = j.at("utilidades").get<vector<int>>();
+
+        cout << "Capacidade: " << capacidade << endl;
+        cout << "Número de itens: " << n_itens << endl;
+        for (int i = 0; i < n_itens; ++i) {
+            cout << "Peso do item " << i << ": " << pesos[i] << ", Utilidade do item " << i << ": " << utilidades[i] << endl;
+        }
+    } catch (json::exception& e) {
+        cerr << "Erro ao processar JSON: " << e.what() << endl;
     }
+
     file.close();
+    cout << "Arquivo fechado com sucesso." << endl;
 }
 
 int Mochila::gerRandNum(int plimit) {
@@ -128,8 +144,13 @@ pair<int, vector<int>> Mochila::solveKSP_2() {
 
     return make_pair(maxUtility, itemsSelected);
 }
-
-int Mochila::knapsack(){
+/**
+ * Algoritmo Dinamico para resolução do problema da mochila.
+ * Complexidade O(nW) pseudo-polinomial
+ * @return par<max_utilidade, tempo_exec> o resultado problema e o tempo gasto para encontrar a solução.
+*/
+pair<int, double> Mochila::knapsack(){
+    auto start = chrono::high_resolution_clock::now();
     vector<int> K(capacidade + 1, 0);
 
     for (int i = 0; i < n_itens; ++i) {
@@ -137,6 +158,7 @@ int Mochila::knapsack(){
             K[w] = max(K[w], K[w - pesos[i]] + utilidades[i]);
         }
     }
-
-    return K[capacidade];
+    auto end = chrono::high_resolution_clock::now();  // Captura o tempo de término
+    chrono::duration<double> duration_in_seconds = end - start;
+    return make_pair(K[capacidade], duration_in_seconds.count());
 }

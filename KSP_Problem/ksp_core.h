@@ -23,7 +23,7 @@ public:
     //int solveKSP();
     pair<int, double> solveKSP();
     pair<int, vector<int>> solveKSP_2();
-    int knapsack();
+    pair<int, double> knapsack();
 
     // Getters
     int getCapacidade() const { return capacidade; }

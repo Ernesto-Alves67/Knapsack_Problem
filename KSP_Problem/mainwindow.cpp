@@ -1,6 +1,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtWidgets>
+#include <QThread>
+#include "knapsackrunner.h"
+
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -15,10 +20,28 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cb_peso, &QComboBox::currentIndexChanged, this, &MainWindow::onTipoEntradaIndexChanged);
     connect(ui->btn_loadFile, &QPushButton::clicked, this, &MainWindow::selectFile);
 }
-
+/**
+ * @details Destrutor da classe.
+*/
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+void MainWindow::aviso_para_usuario(QString mensagem)
+{
+    QMessageBox msgBox;
+    msgBox.setText(mensagem);
+    msgBox.exec();
+}
+bool MainWindow::checa_peso_n_itens()
+{
+    if(ui->sb_capMochila->value() == 0 ||ui->sb_numItens->value() == 0){return false;}
+    else{return true;}
+}
+bool MainWindow::checa_utilidadeEPesoPorItem()
+{
+    if(ui->cb_peso->currentIndex() == 0 || ui->le_pesoItem->text() == " "||ui->cb_util->currentIndex() == 0 || ui->le_utilItem->text() == " "){return false;}
+    else{return true;}
 }
 /**
  * @brief A função abre o dialog para o usuario selecionar um arquivo com as especificações do problema.
@@ -55,17 +78,20 @@ void MainWindow::onTipoEntradaIndexChanged(int index) {
     }
 }
 /**
- * @brief A função abaixo da inicio a execução da solução do problema da mochila.
- * @details Efetuação a execução da solução, e exibe os resultados para o usuário.
+ * @brief A função abaixo captura o sinal de clique em "Executar"
+ * @details Obtém o parametros do problema e chama "init_thread_execution"
 */
 void MainWindow::on_btnExec_clicked()
 {
+    if(!(checa_utilidadeEPesoPorItem() && checa_peso_n_itens())){
+        aviso_para_usuario("Os pesos/item estão vazios! Escolha random ou entre com os valores.");
+        return;
+    }else{ui->te_outDisplay->append(">> Execução iniciada...");}
+    //ui->te_outDisplay->append(">> Execução iniciada...");
     if(ui->sb_capMochila->value() > 0 && ui->sb_numItens->value() > 0){
-        //int resultado; // Valor da capacidade maxima
-        pair<int, double> resultado; // Valor da capacidade maxima
-        pair<int, vector<int>> result;
-        int r =0;
-        ui->te_outDisplay->append(">> Execução iniciada.");
+
+        pair<int, double> resultado; // par<utilidade_maxima, tempoExecuçao>
+
         if (ui->le_nomeArquivo->text().isEmpty()) {
             // ---------- Entrada manual de especificações
             problemData.setCapacidade(ui->sb_capMochila->value());
@@ -73,39 +99,40 @@ void MainWindow::on_btnExec_clicked()
             if (ui->cb_peso->currentIndex() == 1) {
                 problemData.setPesos(problemData.gerRandPesoUtil(problemData.getNItens(), problemData.getCapacidade()));
             }
-            else { problemData.setPesos(problemData.strToArray(ui->le_pesoItem->text().toStdString())); }
+            else {
+                if(ui->cb_peso->currentIndex() == 0 && ui->le_pesoItem->text() == " "){
+                    aviso_para_usuario("Os pesos/item estão vazios! Escolha random ou entre com os valores.");
+                }
+                problemData.setPesos(problemData.strToArray(ui->le_pesoItem->text().toStdString())); }
             if (ui->cb_util->currentIndex() == 1) {
                 problemData.setUtilidades(problemData.gerRandPesoUtil(problemData.getNItens(), problemData.getCapacidade()));
             }
-            else { problemData.setUtilidades(problemData.strToArray(ui->le_utilItem->text().toStdString())); }
-
-            resultado = problemData.solveKSP();
-            result = problemData.solveKSP_2();
-            r= problemData.knapsack();
+            else {
+                if(ui->cb_util->currentIndex() == 0 && ui->le_utilItem->text() == " "){
+                    aviso_para_usuario("As utilidades/items estão vazias! Escolha random ou entre com os valores.");
+                }
+                problemData.setUtilidades(problemData.strToArray(ui->le_utilItem->text().toStdString())); }
+            init_thread_execution();
         }
         else { /// Entra aqui somente se usuario passar um arquivo de texto com as especificações do problema.
             // ---------- Arquivo de Especificações lido.
-            resultado = problemData.solveKSP();
+            init_thread_execution();
         }
-        int maxUtility = result.first;
-        vector<int> itemsSelected = result.second;
-        /// Formatando os dados para exibir os resultados
-        string pesoS = problemData.arrToString(problemData.getPesos());
-        string utilS = problemData.arrToString(problemData.getUtilidades());
-        QString sresult = QString::number(resultado.first);
-        QString stime = QString::number(resultado.second,'f',7);
-        QString reduceResult = QString::number(r);
-        QString info = "Pesos:" + QString::fromStdString(pesoS) + "\n>> Utils.:" + QString::fromStdString(utilS);
-        ui->te_outDisplay->append(">> Solução encontrada: Utilidade maxima => " + reduceResult + " Time: "+stime + "seconds");
-        //ui->te_outDisplay->append(">> " + info);
-        string items;
-        string mu = to_string(maxUtility);
-        for (int item : itemsSelected) {
-            string item_ = to_string(item);
-            items = items+item_+",";
-        }
-        ui->te_outDisplay->append(">> Itens Escolhidos: "+ QString::fromStdString(items)+" MaxU: "+ QString::fromStdString(mu));
-        ui->te_outDisplay->append("=====================================================================================");
+
+        /// Formatando os dados para exibir os resultados para a versã sem Threads
+        // QString sresult = QString::number(resultado.first);
+        // QString stime = QString::number(resultado.second,'f',7);
+
+        // ui->te_outDisplay->append(">> Solução encontrada: Utilidade maxima => " + sresult + "\n Time: "+stime + "seconds");
+        // //ui->te_outDisplay->append(">> " + info);
+        // string items;
+        // string max_u = to_string(maxUtility);
+        // for (int item : itemsSelected) {
+        //     string item_ = to_string(item);
+        //     items = items+item_+",";
+        // }
+        // ui->te_outDisplay->append(">> Itens Escolhidos: "+ QString::fromStdString(items)+" MaxU: "+ QString::fromStdString(max_u));
+        // ui->te_outDisplay->append("=====================================================================================");
     }else{
         QMessageBox msgBox;
         msgBox.setText("A capacidade e qtd. itens não pode ser 0.");
@@ -118,4 +145,32 @@ void MainWindow::on_btnParar_clicked()
     ui->te_outDisplay->clear();
     ui->te_outDisplay->append("Execução interrompida!");
 }
+/**
+ * @brief A função abaixo recebe os resultados da solução.
+ * @details Formata o tempo de execução e exibe a utilidade da mochila para capacidade N e quantidade de itens M.
+*/
+void MainWindow::resultReady(std::pair<int, double> result)
+{
+    QString sresult = QString::number(result.first);
+    QString stime = QString::number(result.second,'f',5);
+    //ui->te_outDisplay->append(">> Execução concluída.");
+    ui->te_outDisplay->append("Utilidade Maxima: "+sresult+" \n Tempo de execução: "+stime+"seconds");
+    ui->te_outDisplay->append("==================================================");
+}
+/**
+ * @brief A função abaixo da inicio a execução da solução do problema da mochila por meio de uma thread.
+ * @details Efetuação a execução da solução, passa o resultado para reseultready
+*/
+void MainWindow::init_thread_execution(){
+    QThread *thread = new QThread;
+    KnapsackRunner *runner = new KnapsackRunner(&problemData);
+    runner->moveToThread(thread);
 
+    connect(thread, &QThread::started, runner, &KnapsackRunner::run);
+    connect(runner, &KnapsackRunner::resultReady, this, &MainWindow::resultReady);
+    connect(runner, &KnapsackRunner::resultReady, thread, &QThread::quit);
+    connect(runner, &KnapsackRunner::resultReady, runner, &KnapsackRunner::deleteLater);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+}
