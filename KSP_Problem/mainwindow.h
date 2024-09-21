@@ -22,11 +22,10 @@ public slots:
     void resultReady(std::pair<int, double> result);
     void selectFile();
     void aviso_para_usuario(QString mensagem);
-    bool checa_utilidadeEPesoPorItem();
-    bool checa_peso_n_itens();
     void init_thread_execution();
+    void show_problem_data();
     // ---------------------- Botoes
-    void onTipoEntradaIndexChanged(int index);
+
     void on_btnExec_clicked();
     void on_btnParar_clicked();
 private:

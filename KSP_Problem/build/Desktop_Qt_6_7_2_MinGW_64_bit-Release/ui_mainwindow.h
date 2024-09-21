@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QComboBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
@@ -19,7 +18,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolButton>
@@ -32,31 +30,20 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QHBoxLayout *horizontalLayout_5;
+    QVBoxLayout *verticalLayout_4;
     QGroupBox *groupBox_2;
-    QVBoxLayout *verticalLayout_2;
+    QHBoxLayout *horizontalLayout_2;
     QHBoxLayout *horizontalLayout;
     QLabel *label_5;
     QLineEdit *le_nomeArquivo;
     QToolButton *btn_loadFile;
-    QHBoxLayout *horizontalLayout_2;
-    QLabel *label;
-    QSpinBox *sb_capMochila;
-    QHBoxLayout *horizontalLayout_6;
-    QLabel *label_2;
-    QSpinBox *sb_numItens;
-    QHBoxLayout *horizontalLayout_3;
-    QLabel *label_3;
-    QLineEdit *le_utilItem;
-    QComboBox *cb_util;
-    QHBoxLayout *horizontalLayout_4;
-    QLabel *label_4;
-    QLineEdit *le_pesoItem;
-    QComboBox *cb_peso;
     QPushButton *btn_exec;
     QPushButton *btn_parar;
     QGroupBox *groupBox;
     QVBoxLayout *verticalLayout;
+    QGroupBox *groupBox_3;
+    QVBoxLayout *verticalLayout_3;
+    QTextEdit *te_problem_data;
     QTextEdit *te_outDisplay;
     QMenuBar *menubar;
     QStatusBar *statusbar;
@@ -69,23 +56,28 @@ public:
         MainWindow->setStyleSheet(QString::fromUtf8("background-color: rgb(85, 85, 127);"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        horizontalLayout_5 = new QHBoxLayout(centralwidget);
-        horizontalLayout_5->setObjectName("horizontalLayout_5");
+        verticalLayout_4 = new QVBoxLayout(centralwidget);
+        verticalLayout_4->setObjectName("verticalLayout_4");
         groupBox_2 = new QGroupBox(centralwidget);
         groupBox_2->setObjectName("groupBox_2");
         groupBox_2->setMinimumSize(QSize(0, 0));
-        groupBox_2->setMaximumSize(QSize(320, 16777215));
+        groupBox_2->setMaximumSize(QSize(16777215, 16777215));
+        QFont font;
+        font.setPointSize(12);
+        font.setBold(true);
+        groupBox_2->setFont(font);
         groupBox_2->setStyleSheet(QString::fromUtf8("background-color: rgb(179, 179, 179);\n"
 "color: rgb(0, 0, 0);"));
-        verticalLayout_2 = new QVBoxLayout(groupBox_2);
-        verticalLayout_2->setObjectName("verticalLayout_2");
+        horizontalLayout_2 = new QHBoxLayout(groupBox_2);
+        horizontalLayout_2->setObjectName("horizontalLayout_2");
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName("horizontalLayout");
         label_5 = new QLabel(groupBox_2);
         label_5->setObjectName("label_5");
-        QFont font;
-        font.setPointSize(11);
-        label_5->setFont(font);
+        QFont font1;
+        font1.setPointSize(11);
+        font1.setBold(true);
+        label_5->setFont(font1);
 
         horizontalLayout->addWidget(label_5);
 
@@ -101,135 +93,70 @@ public:
 
         horizontalLayout->addWidget(btn_loadFile);
 
-
-        verticalLayout_2->addLayout(horizontalLayout);
-
-        horizontalLayout_2 = new QHBoxLayout();
-        horizontalLayout_2->setObjectName("horizontalLayout_2");
-        label = new QLabel(groupBox_2);
-        label->setObjectName("label");
-        label->setMinimumSize(QSize(20, 20));
-        label->setFont(font);
-
-        horizontalLayout_2->addWidget(label);
-
-        sb_capMochila = new QSpinBox(groupBox_2);
-        sb_capMochila->setObjectName("sb_capMochila");
-        QFont font1;
-        font1.setPointSize(10);
-        sb_capMochila->setFont(font1);
-        sb_capMochila->setMaximum(100000000);
-
-        horizontalLayout_2->addWidget(sb_capMochila);
-
-
-        verticalLayout_2->addLayout(horizontalLayout_2);
-
-        horizontalLayout_6 = new QHBoxLayout();
-        horizontalLayout_6->setSpacing(0);
-        horizontalLayout_6->setObjectName("horizontalLayout_6");
-        label_2 = new QLabel(groupBox_2);
-        label_2->setObjectName("label_2");
-        label_2->setMinimumSize(QSize(20, 10));
-        label_2->setMaximumSize(QSize(16777215, 20));
-        label_2->setFont(font);
-        label_2->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
-
-        horizontalLayout_6->addWidget(label_2);
-
-        sb_numItens = new QSpinBox(groupBox_2);
-        sb_numItens->setObjectName("sb_numItens");
-        sb_numItens->setMaximum(10000000);
-
-        horizontalLayout_6->addWidget(sb_numItens);
-
-
-        verticalLayout_2->addLayout(horizontalLayout_6);
-
-        horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setObjectName("horizontalLayout_3");
-        label_3 = new QLabel(groupBox_2);
-        label_3->setObjectName("label_3");
-        label_3->setFont(font);
-
-        horizontalLayout_3->addWidget(label_3);
-
-        le_utilItem = new QLineEdit(groupBox_2);
-        le_utilItem->setObjectName("le_utilItem");
-        le_utilItem->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
-
-        horizontalLayout_3->addWidget(le_utilItem);
-
-        cb_util = new QComboBox(groupBox_2);
-        cb_util->addItem(QString());
-        cb_util->addItem(QString());
-        cb_util->setObjectName("cb_util");
-
-        horizontalLayout_3->addWidget(cb_util);
-
-
-        verticalLayout_2->addLayout(horizontalLayout_3);
-
-        horizontalLayout_4 = new QHBoxLayout();
-        horizontalLayout_4->setSpacing(3);
-        horizontalLayout_4->setObjectName("horizontalLayout_4");
-        label_4 = new QLabel(groupBox_2);
-        label_4->setObjectName("label_4");
-        label_4->setFont(font);
-
-        horizontalLayout_4->addWidget(label_4);
-
-        le_pesoItem = new QLineEdit(groupBox_2);
-        le_pesoItem->setObjectName("le_pesoItem");
-        le_pesoItem->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
-
-        horizontalLayout_4->addWidget(le_pesoItem);
-
-        cb_peso = new QComboBox(groupBox_2);
-        cb_peso->addItem(QString());
-        cb_peso->addItem(QString());
-        cb_peso->setObjectName("cb_peso");
-
-        horizontalLayout_4->addWidget(cb_peso);
-
-
-        verticalLayout_2->addLayout(horizontalLayout_4);
-
         btn_exec = new QPushButton(groupBox_2);
         btn_exec->setObjectName("btn_exec");
-        btn_exec->setFont(font);
+        QFont font2;
+        font2.setPointSize(11);
+        btn_exec->setFont(font2);
         btn_exec->setStyleSheet(QString::fromUtf8("background-color: rgb(122, 122, 122);"));
 
-        verticalLayout_2->addWidget(btn_exec);
+        horizontalLayout->addWidget(btn_exec);
 
         btn_parar = new QPushButton(groupBox_2);
         btn_parar->setObjectName("btn_parar");
-        btn_parar->setFont(font);
+        btn_parar->setFont(font2);
 
-        verticalLayout_2->addWidget(btn_parar);
+        horizontalLayout->addWidget(btn_parar);
 
 
-        horizontalLayout_5->addWidget(groupBox_2);
+        horizontalLayout_2->addLayout(horizontalLayout);
+
+
+        verticalLayout_4->addWidget(groupBox_2);
 
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName("groupBox");
         groupBox->setMinimumSize(QSize(0, 100));
         groupBox->setMaximumSize(QSize(16777215, 16777215));
-        groupBox->setStyleSheet(QString::fromUtf8("background-color: rgb(179, 179, 179);"));
+        groupBox->setFont(font);
+        groupBox->setStyleSheet(QString::fromUtf8("background-color: rgb(179, 179, 179);\n"
+"color: rgb(0, 0, 0);"));
         verticalLayout = new QVBoxLayout(groupBox);
         verticalLayout->setObjectName("verticalLayout");
+        groupBox_3 = new QGroupBox(groupBox);
+        groupBox_3->setObjectName("groupBox_3");
+        groupBox_3->setFont(font);
+        groupBox_3->setStyleSheet(QString::fromUtf8("background-color: rgb(130, 130, 130);"));
+        verticalLayout_3 = new QVBoxLayout(groupBox_3);
+        verticalLayout_3->setObjectName("verticalLayout_3");
+        te_problem_data = new QTextEdit(groupBox_3);
+        te_problem_data->setObjectName("te_problem_data");
+        QFont font3;
+        font3.setPointSize(9);
+        font3.setBold(true);
+        te_problem_data->setFont(font3);
+        te_problem_data->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
+"color: rgb(0, 223, 0);"));
+
+        verticalLayout_3->addWidget(te_problem_data);
+
+
+        verticalLayout->addWidget(groupBox_3);
+
         te_outDisplay = new QTextEdit(groupBox);
         te_outDisplay->setObjectName("te_outDisplay");
-        QFont font2;
-        font2.setFamilies({QString::fromUtf8("Yu Gothic UI Semibold")});
-        font2.setBold(true);
-        te_outDisplay->setFont(font2);
-        te_outDisplay->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
+        QFont font4;
+        font4.setFamilies({QString::fromUtf8("Yu Gothic UI Semibold")});
+        font4.setPointSize(14);
+        font4.setBold(true);
+        te_outDisplay->setFont(font4);
+        te_outDisplay->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
+"color: rgb(255, 255, 255);"));
 
         verticalLayout->addWidget(te_outDisplay);
 
 
-        horizontalLayout_5->addWidget(groupBox);
+        verticalLayout_4->addWidget(groupBox);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -254,29 +181,11 @@ public:
         le_nomeArquivo->setStatusTip(QCoreApplication::translate("MainWindow", "Capacidade total em pesos.", nullptr));
 #endif // QT_CONFIG(statustip)
         le_nomeArquivo->setPlaceholderText(QCoreApplication::translate("MainWindow", "D:\\arquivo\\especifica\303\247\303\243o\\do\\problema", nullptr));
-        btn_loadFile->setText(QCoreApplication::translate("MainWindow", "...", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Capacidade:", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "Qtd. Itens:", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "Utilidade/item:", nullptr));
-        le_utilItem->setInputMask(QString());
-        le_utilItem->setPlaceholderText(QCoreApplication::translate("MainWindow", "[u1,u2,u3,...Un]", nullptr));
-        cb_util->setItemText(0, QCoreApplication::translate("MainWindow", "Self entry", nullptr));
-        cb_util->setItemText(1, QCoreApplication::translate("MainWindow", "Random", nullptr));
-
-#if QT_CONFIG(whatsthis)
-        cb_util->setWhatsThis(QCoreApplication::translate("MainWindow", "Defined by user or Randonly defined.", nullptr));
-#endif // QT_CONFIG(whatsthis)
-        label_4->setText(QCoreApplication::translate("MainWindow", "Peso/item:", nullptr));
-        le_pesoItem->setPlaceholderText(QCoreApplication::translate("MainWindow", "[p1,p2,p3,....Pn]", nullptr));
-        cb_peso->setItemText(0, QCoreApplication::translate("MainWindow", "Self Entry", nullptr));
-        cb_peso->setItemText(1, QCoreApplication::translate("MainWindow", "Random", nullptr));
-
-#if QT_CONFIG(whatsthis)
-        cb_peso->setWhatsThis(QCoreApplication::translate("MainWindow", "Defined by user or Randonly defined.", nullptr));
-#endif // QT_CONFIG(whatsthis)
-        btn_exec->setText(QCoreApplication::translate("MainWindow", "Executar", nullptr));
-        btn_parar->setText(QCoreApplication::translate("MainWindow", "Parar/Clear", nullptr));
+        btn_loadFile->setText(QCoreApplication::translate("MainWindow", "Choose File", nullptr));
+        btn_exec->setText(QCoreApplication::translate("MainWindow", "Execute", nullptr));
+        btn_parar->setText(QCoreApplication::translate("MainWindow", "Stop/Clear", nullptr));
         groupBox->setTitle(QCoreApplication::translate("MainWindow", "Sa\303\255da", nullptr));
+        groupBox_3->setTitle(QCoreApplication::translate("MainWindow", "Dados do Problema:", nullptr));
     } // retranslateUi
 
 };

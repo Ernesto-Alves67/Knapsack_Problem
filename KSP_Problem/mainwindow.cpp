@@ -14,10 +14,10 @@ MainWindow::MainWindow(QWidget *parent)
     //setlocale(LC_ALL, "Portuguese_Brazil");
     ui->te_outDisplay->setReadOnly(true);
     ui->te_outDisplay->setCursor(Qt::ArrowCursor);
+    ui->te_problem_data->setReadOnly(true);
+    ui->te_problem_data->setCursor(Qt::ArrowCursor);
     connect(ui->btn_exec, &QPushButton::clicked, this, &MainWindow::on_btnExec_clicked);
     connect(ui->btn_parar, &QPushButton::clicked, this, &MainWindow::on_btnParar_clicked);
-    connect(ui->cb_util, &QComboBox::currentIndexChanged, this, &MainWindow::onTipoEntradaIndexChanged);
-    connect(ui->cb_peso, &QComboBox::currentIndexChanged, this, &MainWindow::onTipoEntradaIndexChanged);
     connect(ui->btn_loadFile, &QPushButton::clicked, this, &MainWindow::selectFile);
 }
 /**
@@ -33,16 +33,7 @@ void MainWindow::aviso_para_usuario(QString mensagem)
     msgBox.setText(mensagem);
     msgBox.exec();
 }
-bool MainWindow::checa_peso_n_itens()
-{
-    if(ui->sb_capMochila->value() == 0 ||ui->sb_numItens->value() == 0){return false;}
-    else{return true;}
-}
-bool MainWindow::checa_utilidadeEPesoPorItem()
-{
-    if(ui->cb_peso->currentIndex() == 0 || ui->le_pesoItem->text() == " "||ui->cb_util->currentIndex() == 0 || ui->le_utilItem->text() == " "){return false;}
-    else{return true;}
-}
+
 /**
  * @brief A função abre o dialog para o usuario selecionar um arquivo com as especificações do problema.
  * @details Leitura do arquivo selecionado, e definição dos parametros para o problema no objeto do tipo Mochila.
@@ -51,31 +42,26 @@ void MainWindow::selectFile() {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"), "", tr("All Files (*)"));
 
     if (!fileName.isEmpty()) {
-        Mochila data;
-        data.lerArquivo(fileName.toStdString());
-        ui->sb_numItens->setValue(data.getNItens());
-        ui->sb_capMochila->setValue(data.getCapacidade());
-        ui->le_pesoItem->setText(QString::fromStdString(data.arrToString(data.getPesos())));
-        ui->le_utilItem->setText(QString::fromStdString(data.arrToString(data.getUtilidades())));
-        problemData = data;
+
+        ui->le_nomeArquivo->setText(fileName);
+        ui->le_nomeArquivo->setReadOnly(true);
+        problemData.lerArquivo(fileName.toStdString());
+
+        show_problem_data();
     }
     else {
         // Handle error opening the file
         QMessageBox::warning(this, tr("Error"), tr("Unable to open file: ") + fileName);
     }
 }
-/**
- * @brief A função gerencia a criação de pesos e utilidades
- * @details Desabilita
-*/
-void MainWindow::onTipoEntradaIndexChanged(int index) {
-    // Disable the line edit based on the selected index
-    if (ui->cb_util->hasFocus()) {
-        ui->le_utilItem->setEnabled(index == 0);
-    }
-    else {
-        ui->le_pesoItem->setEnabled(index == 0);
-    }
+
+// ================= Exibe os dados do problema a ser resolvido
+void MainWindow::show_problem_data(){
+    ui->te_problem_data->append("= Parâmetros =================================");
+    ui->te_problem_data->append("Pesos: "+QString::fromStdString(problemData.arrToString(problemData.getPesos())));
+    ui->te_problem_data->append("Utilidades: "+QString::fromStdString(problemData.arrToString(problemData.getUtilidades())));
+    ui->te_problem_data->append("Peso Total da Mochila: "+QString::number(problemData.getCapacidade()));
+    ui->te_problem_data->append("Nº items disponiveis para escolha: "+QString::number(problemData.getNItens()));
 }
 /**
  * @brief A função abaixo captura o sinal de clique em "Executar"
@@ -83,61 +69,8 @@ void MainWindow::onTipoEntradaIndexChanged(int index) {
 */
 void MainWindow::on_btnExec_clicked()
 {
-    if(!(checa_utilidadeEPesoPorItem() && checa_peso_n_itens())){
-        aviso_para_usuario("Os pesos/item estão vazios! Escolha random ou entre com os valores.");
-        return;
-    }else{ui->te_outDisplay->append(">> Execução iniciada...");}
-    //ui->te_outDisplay->append(">> Execução iniciada...");
-    if(ui->sb_capMochila->value() > 0 && ui->sb_numItens->value() > 0){
+    init_thread_execution();
 
-        pair<int, double> resultado; // par<utilidade_maxima, tempoExecuçao>
-
-        if (ui->le_nomeArquivo->text().isEmpty()) {
-            // ---------- Entrada manual de especificações
-            problemData.setCapacidade(ui->sb_capMochila->value());
-            problemData.setNItens(ui->sb_numItens->value());
-            if (ui->cb_peso->currentIndex() == 1) {
-                problemData.setPesos(problemData.gerRandPesoUtil(problemData.getNItens(), problemData.getCapacidade()));
-            }
-            else {
-                if(ui->cb_peso->currentIndex() == 0 && ui->le_pesoItem->text() == " "){
-                    aviso_para_usuario("Os pesos/item estão vazios! Escolha random ou entre com os valores.");
-                }
-                problemData.setPesos(problemData.strToArray(ui->le_pesoItem->text().toStdString())); }
-            if (ui->cb_util->currentIndex() == 1) {
-                problemData.setUtilidades(problemData.gerRandPesoUtil(problemData.getNItens(), problemData.getCapacidade()));
-            }
-            else {
-                if(ui->cb_util->currentIndex() == 0 && ui->le_utilItem->text() == " "){
-                    aviso_para_usuario("As utilidades/items estão vazias! Escolha random ou entre com os valores.");
-                }
-                problemData.setUtilidades(problemData.strToArray(ui->le_utilItem->text().toStdString())); }
-            init_thread_execution();
-        }
-        else { /// Entra aqui somente se usuario passar um arquivo de texto com as especificações do problema.
-            // ---------- Arquivo de Especificações lido.
-            init_thread_execution();
-        }
-
-        /// Formatando os dados para exibir os resultados para a versã sem Threads
-        // QString sresult = QString::number(resultado.first);
-        // QString stime = QString::number(resultado.second,'f',7);
-
-        // ui->te_outDisplay->append(">> Solução encontrada: Utilidade maxima => " + sresult + "\n Time: "+stime + "seconds");
-        // //ui->te_outDisplay->append(">> " + info);
-        // string items;
-        // string max_u = to_string(maxUtility);
-        // for (int item : itemsSelected) {
-        //     string item_ = to_string(item);
-        //     items = items+item_+",";
-        // }
-        // ui->te_outDisplay->append(">> Itens Escolhidos: "+ QString::fromStdString(items)+" MaxU: "+ QString::fromStdString(max_u));
-        // ui->te_outDisplay->append("=====================================================================================");
-    }else{
-        QMessageBox msgBox;
-        msgBox.setText("A capacidade e qtd. itens não pode ser 0.");
-        msgBox.exec();
-    }
 }
 /// ---------------- Interrope a execução
 void MainWindow::on_btnParar_clicked()
@@ -154,7 +87,7 @@ void MainWindow::resultReady(std::pair<int, double> result)
     QString sresult = QString::number(result.first);
     QString stime = QString::number(result.second,'f',5);
     //ui->te_outDisplay->append(">> Execução concluída.");
-    ui->te_outDisplay->append("Utilidade Maxima: "+sresult+" \n Tempo de execução: "+stime+"seconds");
+    ui->te_outDisplay->append("Utilidade Máxima: "+sresult+" \n Tempo de execução: "+stime+"seconds");
     ui->te_outDisplay->append("==================================================");
 }
 /**
@@ -174,3 +107,5 @@ void MainWindow::init_thread_execution(){
 
     thread->start();
 }
+
+

@@ -43,11 +43,8 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "selectFile",
     "aviso_para_usuario",
     "mensagem",
-    "checa_utilidadeEPesoPorItem",
-    "checa_peso_n_itens",
     "init_thread_execution",
-    "onTipoEntradaIndexChanged",
-    "index",
+    "show_problem_data",
     "on_btnExec_clicked",
     "on_btnParar_clicked"
 );
@@ -62,7 +59,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -70,24 +67,20 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   68,    2, 0x0a,    1 /* Public */,
-       5,    0,   71,    2, 0x0a,    3 /* Public */,
-       6,    1,   72,    2, 0x0a,    4 /* Public */,
-       8,    0,   75,    2, 0x0a,    6 /* Public */,
-       9,    0,   76,    2, 0x0a,    7 /* Public */,
-      10,    0,   77,    2, 0x0a,    8 /* Public */,
-      11,    1,   78,    2, 0x0a,    9 /* Public */,
-      13,    0,   81,    2, 0x0a,   11 /* Public */,
-      14,    0,   82,    2, 0x0a,   12 /* Public */,
+       1,    1,   56,    2, 0x0a,    1 /* Public */,
+       5,    0,   59,    2, 0x0a,    3 /* Public */,
+       6,    1,   60,    2, 0x0a,    4 /* Public */,
+       8,    0,   63,    2, 0x0a,    6 /* Public */,
+       9,    0,   64,    2, 0x0a,    7 /* Public */,
+      10,    0,   65,    2, 0x0a,    8 /* Public */,
+      11,    0,   66,    2, 0x0a,    9 /* Public */,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    7,
-    QMetaType::Bool,
-    QMetaType::Bool,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,   12,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
 
@@ -111,15 +104,10 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         // method 'aviso_para_usuario'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<QString, std::false_type>,
-        // method 'checa_utilidadeEPesoPorItem'
-        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
-        // method 'checa_peso_n_itens'
-        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
         // method 'init_thread_execution'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'onTipoEntradaIndexChanged'
+        // method 'show_problem_data'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'on_btnExec_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_btnParar_clicked'
@@ -137,14 +125,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 0: _t->resultReady((*reinterpret_cast< std::add_pointer_t<std::pair<int,double>>>(_a[1]))); break;
         case 1: _t->selectFile(); break;
         case 2: _t->aviso_para_usuario((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 3: { bool _r = _t->checa_utilidadeEPesoPorItem();
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 4: { bool _r = _t->checa_peso_n_itens();
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 5: _t->init_thread_execution(); break;
-        case 6: _t->onTipoEntradaIndexChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 7: _t->on_btnExec_clicked(); break;
-        case 8: _t->on_btnParar_clicked(); break;
+        case 3: _t->init_thread_execution(); break;
+        case 4: _t->show_problem_data(); break;
+        case 5: _t->on_btnExec_clicked(); break;
+        case 6: _t->on_btnParar_clicked(); break;
         default: ;
         }
     }
@@ -169,13 +153,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 9)
+        if (_id < 7)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 9;
+        _id -= 7;
     }
     return _id;
 }
